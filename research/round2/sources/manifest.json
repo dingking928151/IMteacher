@@ -1,0 +1,93 @@
+[
+  {
+    "repository": "CAHLR/OATutor",
+    "commit": "e24c8456e5f75c07b6048159ea9e128b036f673d",
+    "path": "README.md",
+    "url": "https://raw.githubusercontent.com/CAHLR/OATutor/e24c8456e5f75c07b6048159ea9e128b036f673d/README.md",
+    "sha256": "8D2A394F9DA7694DE97E47626014DCFE01D4C2278CA3B8A4D63347AB8B2EB842"
+  },
+  {
+    "repository": "CAHLR/OATutor",
+    "commit": "e24c8456e5f75c07b6048159ea9e128b036f673d",
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/CAHLR/OATutor/e24c8456e5f75c07b6048159ea9e128b036f673d/LICENSE",
+    "sha256": "5BAAAF977A28E9FDB1551F4D9D060C4C4FDF881B6CFE131F1C819FBE1CFA8D8D"
+  },
+  {
+    "repository": "CAHLR/OATutor",
+    "commit": "e24c8456e5f75c07b6048159ea9e128b036f673d",
+    "path": "src/models/BKT/BKT-brain.js",
+    "url": "https://raw.githubusercontent.com/CAHLR/OATutor/e24c8456e5f75c07b6048159ea9e128b036f673d/src/models/BKT/BKT-brain.js",
+    "sha256": "4C1F100642B93127C0A30644600363587438B5BA7308EF3AE8D36BC52A06A53C"
+  },
+  {
+    "repository": "CAHLR/OATutor",
+    "commit": "e24c8456e5f75c07b6048159ea9e128b036f673d",
+    "path": "src/components/problem-layout/HintSystem.js",
+    "url": "https://raw.githubusercontent.com/CAHLR/OATutor/e24c8456e5f75c07b6048159ea9e128b036f673d/src/components/problem-layout/HintSystem.js",
+    "sha256": "EE6221BE8AC5100CCB0DC69189695173D69298374E54DBEF02260B92AA0959F7"
+  },
+  {
+    "repository": "CAHLR/OATutor",
+    "commit": "e24c8456e5f75c07b6048159ea9e128b036f673d",
+    "path": "src/models/BKT/problem-select-heuristics/defaultHeuristic.js",
+    "url": "https://raw.githubusercontent.com/CAHLR/OATutor/e24c8456e5f75c07b6048159ea9e128b036f673d/src/models/BKT/problem-select-heuristics/defaultHeuristic.js",
+    "sha256": "1F526DEC4ADDB4C699DB364543F73BAD3CC8B7AAF511D5C64ED149777EEA6F01"
+  },
+  {
+    "repository": "CAHLR/pyBKT",
+    "commit": "0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6",
+    "path": "README.md",
+    "url": "https://raw.githubusercontent.com/CAHLR/pyBKT/0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6/README.md",
+    "sha256": "876F308CFD97E886A75A47974C8F3D773EA5CB974ECA4A0DED5F98169E9258A6"
+  },
+  {
+    "repository": "CAHLR/pyBKT",
+    "commit": "0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6",
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/CAHLR/pyBKT/0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6/LICENSE",
+    "sha256": "AD0C7A38BF01D8F2577BF69309F46D15EF9C82A1CFF3AD19CF4BAE8CEE86704E"
+  },
+  {
+    "repository": "CAHLR/pyBKT",
+    "commit": "0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6",
+    "path": "source-py/pyBKT/models/Model.py",
+    "url": "https://raw.githubusercontent.com/CAHLR/pyBKT/0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6/source-py/pyBKT/models/Model.py",
+    "sha256": "DA4C64CD9E56BB2C9746B504D1204144DDA3A193FA5A0B1EA06F1D3BB1DB4612"
+  },
+  {
+    "repository": "CAHLR/pyBKT",
+    "commit": "0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6",
+    "path": "source-py/pyBKT/util/data_helper.py",
+    "url": "https://raw.githubusercontent.com/CAHLR/pyBKT/0f4ea412e18f6bcbd396fdf2be68fdd43aebebb6/source-py/pyBKT/util/data_helper.py",
+    "sha256": "60350D2D794579FAA6997D6EB7EB5CFD81B4561C822F2317A2EF69F4C796A19D"
+  },
+  {
+    "repository": "open-spaced-repetition/fsrs4anki",
+    "commit": "ff7c85cee735472d1c9cec0b9252d184087f74d8",
+    "path": "README.md",
+    "url": "https://raw.githubusercontent.com/open-spaced-repetition/fsrs4anki/ff7c85cee735472d1c9cec0b9252d184087f74d8/README.md",
+    "sha256": "25DFA4EE0B6E54B117207CE8C2648AD0B854C063BF74B69D7D384034EC16BC36"
+  },
+  {
+    "repository": "open-spaced-repetition/fsrs4anki",
+    "commit": "ff7c85cee735472d1c9cec0b9252d184087f74d8",
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/open-spaced-repetition/fsrs4anki/ff7c85cee735472d1c9cec0b9252d184087f74d8/LICENSE",
+    "sha256": "2EC9E6E61ED82AF824583C0F91C6103948ED527B727281BC9F51DE46780EE4D7"
+  },
+  {
+    "repository": "open-spaced-repetition/fsrs4anki",
+    "commit": "ff7c85cee735472d1c9cec0b9252d184087f74d8",
+    "path": "fsrs4anki_scheduler.js",
+    "url": "https://raw.githubusercontent.com/open-spaced-repetition/fsrs4anki/ff7c85cee735472d1c9cec0b9252d184087f74d8/fsrs4anki_scheduler.js",
+    "sha256": "F323ACCB38EE17C792A7685A9C9AC7F5E7C3C7B9544D6E5F8A01E68000F1B84E"
+  },
+  {
+    "repository": "open-spaced-repetition/fsrs4anki",
+    "commit": "ff7c85cee735472d1c9cec0b9252d184087f74d8",
+    "path": "fsrs4anki_scheduler_qt5.js",
+    "url": "https://raw.githubusercontent.com/open-spaced-repetition/fsrs4anki/ff7c85cee735472d1c9cec0b9252d184087f74d8/fsrs4anki_scheduler_qt5.js",
+    "sha256": "A2C14ADBB09CAF4B2D26502A79FA1904C09CD282F7791E5492AA553B4FC7366D"
+  }
+]

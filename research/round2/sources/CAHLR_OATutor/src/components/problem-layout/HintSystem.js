@@ -1,0 +1,466 @@
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import HintTextbox from "./HintTextbox.js";
+import {
+    renderText,
+    chooseVariables,
+} from "../../platform-logic/renderText.js";
+import SubHintSystem from "./SubHintSystem.js";
+import { ThemeContext } from "../../config/config";
+import Spacer from "../Spacer";
+import { stagingProp } from "../../util/addStagingProperty";
+import ErrorBoundary from "../ErrorBoundary";
+import withTranslation from '../../util/withTranslation';
+import ReloadIcon from './ReloadIcon';
+import TTSPlayer from "../../util/ttsPlayer.js";
+import TTSButtons from "./TTSButtons.js";
+import { textToReadable } from "../../util/latexToReadable.js";
+import {
+    shouldPenalizeSubHintPanelOpen,
+    shouldPenalizeSubHintUnlock,
+} from "../../util/helpPenaltyMode.js";
+
+class HintSystem extends React.Component {
+    static contextType = ThemeContext;
+
+    constructor(props) {
+        super(props);
+
+        var subHintsFinished = [];
+        for (var i = 0; i < this.props.hints.length; i++) {
+            subHintsFinished.push(
+                new Array(
+                    this.props.hints[i].subHints !== undefined
+                        ? this.props.hints[i].subHints.length
+                        : 0
+                ).fill(0)
+            );
+        }
+
+        this.giveStuFeedback = props.giveStuFeedback;
+        this.unlockFirstHint = props.unlockFirstHint;
+        this.isIncorrect = props.isIncorrect;
+        this.giveHintOnIncorrect = props.giveHintOnIncorrect
+        this.generateHintFromGPT = props.generateHintFromGPT;
+        this.enableTTS = props.enableTTS;
+
+        this.ttsPlayers = {};
+
+        this.state = {
+            latestStep: 0,
+            currentExpanded: -1,
+            hintAnswer: "",
+            showSubHints: new Array(this.props.hints.length).fill(false),
+            subHintsFinished: subHintsFinished,
+            ttsPlayingHint: -1, // index of currently playing hint, -1 = none
+        };
+
+        if (this.unlockFirstHint && this.props.hintStatus.length > 0) {
+            this.props.unlockHint(0, this.props.hints[0].type);
+        }
+
+        if (this.giveHintOnIncorrect && this.isIncorrect && this.props.hintStatus.length > 0) {
+            this.props.unlockHint(0, this.props.hints[0].type);
+        }
+    }
+
+    componentDidMount() {
+        if (!this.enableTTS) return;
+        for (let j = 0; j < this.props.hints.length; j++) {
+            const hint = this.props.hints[j];
+            let segments = null;
+            if (hint.pacedSpeech && Array.isArray(hint.pacedSpeech) && hint.pacedSpeech.length > 0) {
+                segments = hint.pacedSpeech;
+            } else {
+                const raw = textToReadable(
+                    (hint.title && hint.title !== "nan" ? hint.title : "") + ". " + (hint.text || "")
+                );
+                if (raw && raw !== ".") segments = [raw];
+            }
+            if (segments && segments.length > 0) {
+                const player = new TTSPlayer();
+                player.onStateChange((playing) => this.setState({ ttsPlayingHint: playing ? j : -1 }));
+                player.onReady(() => this.forceUpdate());
+                this.ttsPlayers[j] = player;
+                player.fetchAudio(segments);
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        Object.values(this.ttsPlayers).forEach(p => p.destroy());
+    }
+
+    toggleHintTTS = (hintIndex) => {
+        const player = this.ttsPlayers[hintIndex];
+        if (!player) return;
+        // Stop any other playing hint
+        Object.entries(this.ttsPlayers).forEach(([idx, p]) => {
+            if (parseInt(idx) !== hintIndex && p.playing) {
+                p.pause();
+            }
+        });
+        player.onStateChange((playing) => {
+            this.setState({ ttsPlayingHint: playing ? hintIndex : -1 });
+        });
+        player.togglePlayPause();
+    };
+
+    replayHintTTS = (hintIndex) => {
+        const player = this.ttsPlayers[hintIndex];
+        if (!player) return;
+        Object.entries(this.ttsPlayers).forEach(([idx, p]) => {
+            if (parseInt(idx) !== hintIndex && p.playing) {
+                p.pause();
+            }
+        });
+        player.onStateChange((playing) => {
+            this.setState({ ttsPlayingHint: playing ? hintIndex : -1 });
+        });
+        player.replay();
+    };
+
+    unlockHint = (event, expanded, i) => {
+        if (this.state.currentExpanded === i ) {
+            this.setState({ currentExpanded: -1 });
+        } else {
+            this.setState({ currentExpanded: i });
+            if (expanded && i < this.props.hintStatus.length) {
+                this.props.unlockHint(i, this.props.hints[i].type);
+            }
+            this.setState({ latestStep: i });
+        }
+    };
+
+    isLocked = (hintNum) => {
+        if (hintNum === 0) {
+            return false;
+        }
+        var dependencies = this.props.hints[hintNum].dependencies;
+        var isSatisfied = dependencies.every(
+            (dependency) => this.props.hintStatus[dependency] === 1
+        );
+        return !isSatisfied;
+    };
+
+    toggleSubHints = (event, i) => {
+        const opening = !this.state.showSubHints[i];
+        this.setState(
+            (prevState) => {
+                const displayHints = [...prevState.showSubHints];
+                displayHints[i] = opening;
+                return { showSubHints: displayHints };
+            },
+            () => {
+                if (
+                    opening &&
+                    shouldPenalizeSubHintPanelOpen({
+                        mode: this.props.hintPenaltyMode,
+                    })
+                ) {
+                    this.props.applyHelpPenalty?.(this.props.index);
+                }
+            }
+        );
+    };
+
+    unlockSubHint = (hintNum, i, isScaffold) => {
+        const subHint = this.props.hints?.[i]?.subHints?.[hintNum];
+        this.setState(
+            (prevState) => {
+                prevState.subHintsFinished[i][hintNum] = !isScaffold ? 1 : 0.5;
+                return { subHintsFinished: prevState.subHintsFinished };
+            },
+            () => {
+                if (
+                    shouldPenalizeSubHintUnlock({
+                        mode: this.props.hintPenaltyMode,
+                        hintType: subHint?.type,
+                    })
+                ) {
+                    this.props.applyHelpPenalty?.(this.props.index);
+                }
+                this.context.firebase.log(
+                    null,
+                    this.props.problemID,
+                    this.props.step,
+                    null,
+                    null,
+                    this.state.subHintsFinished,
+                    "unlockSubHint",
+                    chooseVariables(this.props.stepVars, this.props.seed),
+                    this.props.lesson,
+                    this.props.courseName
+                );
+            }
+        );
+    };
+
+    submitSubHint = (parsed, hint, isCorrect, i, hintNum) => {
+        if (isCorrect) {
+            this.setState((prevState) => {
+                prevState.subHintsFinished[i][hintNum] = 1;
+                return { subHintsFinished: prevState.subHintsFinished };
+            });
+        }
+        this.context.firebase.hintLog(
+            parsed,
+            this.props.problemID,
+            this.props.step,
+            hint,
+            isCorrect,
+            this.state.hintsFinished,
+            chooseVariables(
+                Object.assign({}, this.props.stepVars, hint.variabilization),
+                this.props.seed
+            ),
+            this.props.lesson,
+            this.props.courseName
+        );
+    };
+
+    render() {
+        const { translate } = this.props;
+        const { classes, index, hints, problemID, seed, stepVars } = this.props;
+        const { currentExpanded, showSubHints } = this.state;
+        const { debug, use_expanded_view } = this.context;
+
+        return (
+            <div className={classes.root}>
+                {/* {this.giveDynamicHint && <div>hi</div>} */}
+                {hints.map((hint, i) => (
+                    <Accordion
+                        key={`${problemID}-${hint.id}`}
+                        className={classes.accordion}
+                        classes={{ expanded: classes.accordionExpanded }}
+                        onChange={(event, expanded) =>
+                            this.unlockHint(event, expanded, i)
+                        }
+                        disabled={
+                            this.isLocked(i) && !(use_expanded_view && debug)
+                        }
+                        expanded={
+                            currentExpanded === i ||
+                            (use_expanded_view != null &&
+                                use_expanded_view &&
+                                debug)
+                        }
+                        defaultExpanded={false}
+                        style={{ margin: 0, boxShadow: "none", borderBottom: "1px solid #e7e7e7ff", }}
+                    >
+                        <AccordionSummary
+                            className={classes.accordionSummary}
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                            {...stagingProp({
+                                "data-selenium-target": `hint-expand-${i}-${index}`,
+                            })}
+                        >
+                            <Typography className={classes.heading}>
+                                {translate("hintsystem.hint") + (i + 1)}
+                                {this.ttsPlayers[i] && (
+                                    <TTSButtons
+                                        playing={this.state.ttsPlayingHint === i}
+                                        onToggle={(e) => { e.stopPropagation(); this.toggleHintTTS(i); }}
+                                        onReplay={(e) => { e.stopPropagation(); this.replayHintTTS(i); }}
+                                        disabled={!this.ttsPlayers[i].isReady()}
+                                    />
+                                )}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails className={classes.accordionDetails}>
+                        <div style={{ width: "100%" }}>
+                            <Typography
+                                component={"span"}
+                                style={{ width: "100%" }}
+                            >
+                                {hint.title && hint.title !== "nan" && (
+                                    <>
+                                        <strong>
+                                            {renderText(
+                                                hint.title,
+                                                problemID,
+                                                chooseVariables(
+                                                    Object.assign(
+                                                        {},
+                                                        stepVars,
+                                                        hint.variabilization
+                                                    ),
+                                                    seed
+                                                ),
+                                                this.context
+                                            )}
+                                        </strong>
+                                        <br />
+                                    </>
+                                )}
+                                {renderText(
+                                    hint.text,
+                                    problemID,
+                                    chooseVariables(
+                                        Object.assign(
+                                            {},
+                                            stepVars,
+                                            hint.variabilization
+                                        ),
+                                        seed
+                                    ),
+                                    this.context
+                                )}
+                                {hint.type === "scaffold" ? (
+                                    <div>
+                                        <Spacer />
+                                        <HintTextbox
+                                            hintNum={i}
+                                            hint={hint}
+                                            index={index}
+                                            submitHint={this.props.submitHint}
+                                            seed={this.props.seed}
+                                            hintVars={Object.assign(
+                                                {},
+                                                this.props.stepVars,
+                                                hint.variabilization
+                                            )}
+                                            toggleHints={(event) =>
+                                                this.toggleSubHints(event, i)
+                                            }
+                                            giveStuFeedback={
+                                                this.giveStuFeedback
+                                            }
+                                        />
+                                    </div>
+                                ) : (
+                                    ""
+                                )}
+                                {(hint.subHints !== undefined &&
+                                    hint.subHints.length > 0 &&
+                                    (hint.type === "scaffold" ||
+                                        showSubHints[i] ||
+                                        (use_expanded_view && debug))) ? (
+                                    <div className="SubHints">
+                                        <Spacer />
+                                        <ErrorBoundary
+                                            componentName={"SubHintSystem"}
+                                        >
+                                            <SubHintSystem
+                                                giveStuFeedback={
+                                                    this.giveStuFeedback
+                                                }
+                                                unlockFirstHint={
+                                                    this.unlockFirstHint
+                                                }
+                                                problemID={problemID}
+                                                hints={hint.subHints}
+                                                unlockHint={this.unlockSubHint}
+                                                hintStatus={
+                                                    this.state.subHintsFinished[
+                                                        i
+                                                    ]
+                                                }
+                                                submitHint={this.submitSubHint}
+                                                parent={i}
+                                                index={index}
+                                                seed={this.props.seed}
+                                                hintVars={Object.assign(
+                                                    {},
+                                                    this.props.stepVars,
+                                                    hint.variabilization
+                                                )}
+                                            />
+                                        </ErrorBoundary>
+                                        <Spacer />
+                                    </div>
+                                ) : (
+                                    ""
+                                )}
+                            </Typography>
+                             {/* Check if the hint is dynamic (AI-generated) */}
+                             {hint.type === "gptHint" 
+                                && !this.props.isGeneratingHint
+                                && (
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                    }}
+                                >
+                                    <ReloadIcon
+                                        style={{
+                                            cursor: "pointer",
+                                            fontSize: "24px",
+                                        }}
+                                        onClick={() => this.generateHintFromGPT(true)}
+                                        title="Regenerate Hint"
+                                    />
+                                </div>
+                            )}
+                            </div>
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
+            </div>
+        );
+    }
+}
+
+const styles = (theme) => ({
+    root: {
+        width: "100%",
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: 600,
+        color: "#3f7091",
+    },
+    accordion: {
+        backgroundColor: "#ffffff",
+        border: "1px solid #a3c5de",
+        borderRadius: 6,
+        marginBottom: 6,
+        boxShadow: "none",
+        overflow: "hidden",
+        "&:before": {
+            display: "none",
+        },
+        "&.Mui-disabled": {
+            backgroundColor: "#f5f8fb",
+            borderColor: "#d4e3ef",
+        },
+    },
+    accordionExpanded: {
+        margin: "0 0 6px 0",
+    },
+    accordionSummary: {
+        minHeight: 44,
+        backgroundColor: "#ffffff",
+        borderRadius: 6,
+        "&.Mui-expanded": {
+            minHeight: 44,
+            backgroundColor: "#eef4fa",
+            borderRadius: "6px 6px 0 0",
+        },
+        "& .MuiAccordionSummary-content": {
+            margin: "10px 0",
+        },
+    },
+    accordionDetails: {
+        backgroundColor: "#eef4fa",
+        borderTop: "1px solid #a3c5de",
+        borderRadius: "0 0 6px 6px",
+        paddingTop: theme.spacing(1.5),
+        paddingBottom: theme.spacing(1.5),
+        overflowY: "auto",
+        maxHeight: "60vh",
+        [theme.breakpoints.down('sm')]: {
+            maxHeight: "50vh",
+        },
+    },
+});
+
+export default withStyles(styles)(withTranslation(HintSystem));

@@ -1,0 +1,4 @@
+# 本地研究原料：原生字幕/视频元数据/第三方源码快照，仅留本地研究目录，不作为套件分发内容
+research/**/*_work/
+research/round2/claude/repos/
+backups/
