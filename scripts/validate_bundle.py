@@ -5,12 +5,12 @@ import sys
 import yaml
 
 root = Path(__file__).resolve().parents[1]
-expected = {'using-im', 'implanner', 'imteacher', 'imsupervisor'}
+expected = {'using-im', 'implanner', 'imteacher', 'imsupervisor', 'imreflect', 'imcompanion'}
 errors = []
 actual = {p.name for p in (root / 'skills').iterdir() if p.is_dir()}
 if actual != expected:
     errors.append(f'Skill set differs: {actual ^ expected}')
-shared_files = ('state-contract.md', 'adaptation-loop.md')
+shared_files = ('state-contract.md', 'adaptation-loop.md', 'onboarding.md', 'agent-runtime.md', 'feedback-loop.md', 'background-followups.md')
 for name in sorted(expected):
     folder = root / 'skills' / name
     main = folder / 'SKILL.md'
@@ -52,4 +52,4 @@ if not original_refs <= present:
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     raise SystemExit(1)
-print('PASS: all four skills; structural checks only, not behavioral validation.')
+print('PASS: all six skills; structural checks only, not behavioral validation.')

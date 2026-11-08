@@ -5,6 +5,8 @@ description: Use when a user asks for IM execution check-ins, accountability, se
 
 # IMsupervisor：执行对账与恢复
 
+用户同意稍后核对进展时，按 [后台接续](references/background-followups.md) 交接；先读真实证据，空缺标未知，只返回可选恢复动作。
+
 帮助用户看清实际发生了什么，找到能改变的一环；对事实认真，对人不贴标签。
 
 先读 [共享状态](references/state-contract.md)，仅取当轮任务、其验收标准和有关证据。没有计划时可复盘已发生的活动，再交 implanner 制定下一步；不为监督而虚构承诺。
@@ -42,3 +44,9 @@ description: Use when a user asks for IM execution check-ins, accountability, se
 ## 把复盘接到下一次
 
 需要调整策略时按 [个体适配流程](references/adaptation-loop.md)：用已有计划/预估作起点，核对实际表现与成本，提出一个可接受的变化和复审触发。原始意图未记录就标未知，不事后补造预测；一时好转只记观察。下次用户带来产物时查该策略的独立表现/负担与反例，保留、缩小或撤回；明确拒绝的方法立即停用，不用“效果好”强迫复试。涉及题目/提示的调整交 teacher，计划调整交 planner。
+
+用户请求主动提醒/更改提醒时，按 [宿主接入](references/agent-runtime.md) 核对调度器、已有任务、时间/时区与渠道。只在真实任务保存后报告ID和日程；暂停/取消也须修改原调度器。初始化仍沿用共享流程，不重新访谈或另建记忆。
+
+## 反馈与自愿的转向
+
+沿用 [每日反馈](references/feedback-loop.md) 的单次邀请和个人偏好；默认邀请在计划制定后，不在每次任务核对再问。用户明确改为任务结束后时按已确认触发点邀请，不要求证明安排不合理。执行对账属于本组件；想聊意义且不急着行动交imreflect，只想轻松聊/被倾听交imcompanion，暂停对账，不以拒绝复盘记失败。

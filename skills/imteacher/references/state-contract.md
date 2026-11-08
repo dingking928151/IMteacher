@@ -10,6 +10,7 @@
 
 ```yaml
 schema_version: 1
+state_revision: 0 # 可选：所有状态更新的版本；不等于已实现条件写/锁
 updated_at: YYYY-MM-DDThh:mm:ss+08:00
 timezone: Asia/Shanghai
 mode: standalone # 或 suite
@@ -19,6 +20,10 @@ day_opened_on: null # 首次制定当日计划时写当地日期，独立于 upd
 active_track: null
 sources: [] # 路径、最后读到的日期；原始学习记录不在此重抄
 adaptation_source: null # 可选：现有画像/适配流水的唯一正本指针
+onboarding: null # 可选：status、reviewed_at、known_fields、deferred_fields；旧记录缺省不代表新人
+runtime_binding: null # 可选：宿主、正本资源映射、唯一写入宿主、已实际核查能力；不放凭据
+interaction: null # 可选：feedback_offered_on、偏好正本指针；没有此字段不代表新人
+reminders: [] # 可选：owner_host、真实schedule_id与核对摘要；不是调度器
 directions: [] # 用户原话/已确认方向、约束、探索假设、复审日期
 tracks: [] # id、状态、账本路径、next_step、现有证据
 today:
@@ -40,8 +45,16 @@ next_action: null
 | implanner | directions、tracks 的计划字段、today、plan_version、day_opened_on | 交目标任务和验收标准 |
 | imteacher | 学习账本、画像与 tracks 的学习证据、next_step | 返回实际掌握证据/阻碍；不代填计划完成 |
 | imsupervisor | execution、阻碍、proposals | 将需重排的建议交 planner，不自行改计划 |
+| imreflect | 经本人确认可保存的理解/未决问题摘要或指针 | 准备承诺行动再交planner，不直接改directions/today |
+| imcompanion | 经授权的最小互动偏好，通常无需保存聊天 | 按本人意愿切换，不建心理诊断档案 |
+
+interaction由当前唯一写入者维护，反馈日期只在实际邀请后更新；所有组件共用同一画像与[每日反馈协议](feedback-loop.md)，不是各建每日问卷。对话选择与频率偏好保存在既有画像正本；仅闲聊不为此强制读写状态。
 
 独立 imteacher 未使用套件时，可继续写原有日开与预算。用户显式采用套件或已存在 suite 状态时使用分工；新组件缺失时说明降级方式，不声称已调用不可用 skill。
+
+## 独立teacher的反馈落点
+
+仅使用旧TMP、尚无IM_STATE的独立模式，不为反馈强制新建套件状态。在同一份TMP备忘录的“互动元数据”节记录feedback_offered_on（实际邀请的当地日期/时区）及画像正本指针；它不是日计划，不写进各教学线重复保存。已有IM_STATE时只用其interaction，不维护两份日期。切换suite时迁入已确认元数据一次，TMP该节改为正本指针；迁入前核对是否同日已邀请。无权限或用户不愿保存时只做本轮去重，不声称跨会话保证。
 
 ## 日期与多会话
 
@@ -76,3 +89,9 @@ suite 的当日计划正本为 `IM_STATE.md` 的 today；旧 TMP 的“今日计
 ## 个体适配
 
 需要调整讲法、复习或估时时，按 [个体适配与方法改进](adaptation-loop.md) 区分明确偏好、观察/试用与有限情境的个人默认。保留反例、帮助程度和复审触发；个人参数变化不直接修改全局技能。状态只索引画像，不重复持有一份效果账。
+
+## 首次使用与外部宿主
+
+首次采用套件或明确要求设置时按 [互动初始化](onboarding.md) 分轮了解目标与约束，复用已有记录；简单答疑、工程咨询与续课不强制访谈。直接调用组件时也沿用同一份初始化状态，不各建一份画像。个人数据保存沿用用户授权与当前环境权限。
+
+Dot/Grok Bot等宿主、跨设备访问和提醒按 [宿主接入](agent-runtime.md) 核对真实能力与正本。state_revision是可选记录字段，本文件不提供同步服务器、调度器、通知服务或文件锁；这些能力未实测就保持未知。

@@ -1,4 +1,15 @@
-# 本地研究原料：原生字幕/视频元数据/第三方源码快照，仅留本地研究目录，不作为套件分发内容
-research/**/*_work/
-research/round2/claude/repos/
 backups/
+research/claude/*_work/
+__pycache__/
+*.pyc
+tests/results/*-raw.json
+
+research/round2/sources/
+research/round2/claude/repos/
+
+research/round4/claude/*_work/
+research/round4/claude/repos/
+research/round4/sources/
+
+research/round4/claude/video-evidence/
+research/round4/claude/repo-evidence/
