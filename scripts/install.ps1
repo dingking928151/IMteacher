@@ -5,7 +5,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
-$skillNames = @('using-im','implanner','imteacher','imsupervisor')
+$skillNames = @('using-im','implanner','imteacher','imsupervisor','imreflect','imcompanion')
 $targetRoots = @{
     Codex = Join-Path $env:USERPROFILE '.codex\skills'
     Claude = Join-Path $env:USERPROFILE '.claude\skills'

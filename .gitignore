@@ -2,3 +2,5 @@
 research/**/*_work/
 research/round2/claude/repos/
 backups/
+/dist/
+/tests/round5/package.json

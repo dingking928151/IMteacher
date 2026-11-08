@@ -5,6 +5,8 @@ description: Use when a user wants IM study planning, weekly or daily priorities
 
 # IMplanner：学业与个人发展规划
 
+用户同意稍后探索人生或职业线索时，按 [后台接续](references/background-followups.md) 交接；结果是待讨论的证据或小实验，不能直接升级为目标。
+
 产出用户愿意实行、时间装得下、可根据经验调整的计划。学业与个人发展共享现实约束；不要把理想生活变成无限任务清单。
 
 先读 [共享状态](references/state-contract.md)。沿用已确认目标、预算与课程下一步；只问会改变决策的缺失信息。用户只要今天安排时，直接排今天，不先做价值观访谈。
@@ -16,7 +18,8 @@ description: Use when a user wants IM study planning, weekly or daily priorities
 | 今天/本周安排 | 目标与约束已知则直接落实任务 |
 | 多条线冲突/反复超量 | 核对真实时间、截止日和用户优先级，再减量 |
 | 人生方向不确定 | 用 [方向探索](references/life-planning.md)，先小实验 |
-| 明确要深度复盘/年度规划 | 可选用 [反思问题](references/reflection.md)，由用户作答 |
+| 想探讨经历/意义，尚不想定目标 | 交imreflect先谈，不强迫落为任务 |
+| 明确要年度规划 | 本组件负责路线；可选 [反思问题](references/reflection.md)，本人愿意才展开 |
 
 ## 从方向到行动
 
@@ -36,7 +39,7 @@ description: Use when a user wants IM study planning, weekly or daily priorities
 
 ## 最小输出
 
-一句目标与约束 + 简短任务表（动作/分钟/验收）+ 暂缓项及原因 + 第一动作。计划涉及假设时明确标注。修改计划时更新日期与 plan_version；只有制定当日计划时才写 day_opened_on，纯年度方向讨论不改日开状态。已开始授课时不重排全局计划。
+一句目标与约束 + 简短任务表（动作/分钟/验收）+ 暂缓项及原因 + 第一动作。这是学习/项目任务的常见形状；休息、关系、兴趣或纯探索可只写需保护的时段/意愿和取舍，不设分数、交记录或验收指标，时间也可保留弹性。计划涉及假设时明确标注。修改计划时更新日期与 plan_version；只有制定当日计划时才写 day_opened_on，纯年度方向讨论不改日开状态。已开始授课时不重排全局计划。
 
 例：已有三线任务，用户仅有25分钟且无已知截止日。按用户已指定主线安排“3分钟提取回顾＋18分钟尝试一道原有练习＋4分钟核对卡点”；验收为保留本人的提取回答、原练习尝试与具体卡点，不要求限时内做对。另两线暂缓到下一次有余量时复审。这是示例排序，不是为该用户补造偏好。
 
@@ -50,3 +53,7 @@ description: Use when a user wants IM study planning, weekly or daily priorities
 ## 用实际经验校准
 
 按 [个体适配流程](references/adaptation-loop.md) 区分用户明确的预算/偏好与估时假设。只比较任务类型与帮助情况相近的预计/实际，区分净操作和被打断的总时段，给合理范围；单次超时先记观察，不改写成“效率低”。证据不足先缩小本次任务并留复审条件，不从回顾记录自动重排长期方向。个人发展实验同时看获得的信息、体验和负担，不只考核产量。
+
+## 当天计划后的反馈
+
+按 [每日反馈](references/feedback-loop.md) 在首次完成日计划后给一句可跳过的建议入口；先看用户偏好与当日已邀请记录，不重复追问。明确“先开始/别问”则直接执行。收到建议分清偏好、事实、方法和价值，解释采纳/保留理由；具体计划变更仍由本组件应用预算、版本与重大取舍规则。想聊天或探讨意义时可转companion/reflect，不额外塞入每日日程。

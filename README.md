@@ -1,6 +1,6 @@
 # IM：学习与个人发展技能套件
 
-当前修订：v0.2（2026-11-06）；首版：2026-11-05。保留 IMteacher 的教学方法，增加规划、督学与入口；学业为基础，同时支持用户选择的人生方向和个人发展。
+当前修订：v0.5（2026-11-08）；首版：2026-11-05。保留 IMteacher 的教学方法，增加规划、督学与入口；学业为基础，同时支持用户选择的人生方向和个人发展。
 
 ## 组成与使用
 
@@ -10,14 +10,16 @@
 | implanner | 方向探索、阶段/周/日计划 | 学业之外也想做个人发展，先帮我探索几个方向 |
 | imteacher | 系统学习与续课 | 使用 imteacher，继续 GraphSAGE，从上次未完成处开始 |
 | imsupervisor | 执行对账与复盘 | 使用 imsupervisor，核对昨天实际做了什么，再调整下一步 |
+| imreflect | 自愿反思、经历意义、可能人生 | 最近忙得很多但不知道意义，想先聊聊，不急着定目标 |
+| imcompanion | 轻松交流、倾听与日常关怀 | 今天不想优化，就随便聊点有趣的 |
 
-不必每轮点名全部组件。单题答疑直接回答，续课直接教学；套件不会自动创建新聊天或后台代理。
+不必每轮点名全部组件。首次正式使用可先互动初始化；单题答疑直接回答，续课直接教学，不重复访谈。套件不会自行创建新聊天或后台代理。
 
 人生规划支持：本人重视的生活与约束、学业/科研/职业探索、作品项目、精力健康、关系与兴趣等。长期方向可修订，近期用小实验获取信息。AI帮助比较，决定由用户作出。
 
 ## 状态与兼容
 
-四技能分发同一份共享状态约定和个体适配流程，正本在 `shared/state-contract.md` 与 `shared/adaptation-loop.md`。实际使用时状态放在用户指定学习/项目目录的 `IM_STATE.md`，索引原有教案和账本；本仓库不预填用户目标或日期。
+六技能分发同一份共享状态约定和个体适配流程，正本在 `shared/state-contract.md` 与 `shared/adaptation-loop.md`。实际使用时状态放在用户指定学习/项目目录的 `IM_STATE.md`，索引原有教案和账本；本仓库不预填用户目标或日期。
 
 - 独立 imteacher 继续支持旧 TMP、画像、知识账、日开与回顾。
 - suite 中 planner 写计划，teacher 写学习证据，supervisor 写执行记录与提案，入口选负责人。
@@ -42,9 +44,23 @@
 
 研究不限于视频：[学习科学来源审核](research/round2/codex-evidence-audit.md) 与 [GitHub源码采用映射](research/round2/codex-repository-audit.md) 记录全文/摘要/元数据边界、三个固定提交、许可证及拒绝采用的内容。Claude原始报告保留，审核纠正以Codex审核页为准。未接入BKT或FSRS引擎，复习窗口属于可调整的人工规则。
 
+## 首次使用、个人agent与提醒
+
+[首次互动流程](shared/onboarding.md) 会分轮了解当前目标、起点、现实约束和偏好，允许跳过，复用已有资料；不会替用户填写人生方向。
+
+[宿主接入协议](shared/agent-runtime.md) 与 [可交给Dot/Grok Bot的指令](adapters/personal-agent/START-HERE.md) 定义状态正本、唯一写入宿主、离线提案及真实提醒的保存/修改/取消。六技能可供能读取规则与引用的宿主采用，但复制skill不等于同步记忆。能力/账号未实际核查就保持未知。
+
+用 `python -X utf8 scripts/package_bundle.py --version 0.5` 生成可移植规则包。原生导入、跨产品状态读取、后台运行及手机投递均需要按宿主分别验证。
+
+## 后台接续（v0.5）
+
+在明确授权范围内，将值得回看的职业想法、课前准备、用户主动要求的回访或执行核对交给可用的个人 agent。线索可以等到合适时机，过期就放下。结果可以只是一条证据、一个问题或一个可撤回的小实验，由原技能与用户决定怎么接着做。
+
+[后台接续协议](shared/background-followups.md)定义任务授权、唯一执行者、低成本唤醒、重试去重和回传边界。默认不开启；空队列静默，断连记受阻，后台产物不写正式学习进度。[宿主接入](adapters/personal-agent/START-HERE.md)包含手动试跑方法。
+
 ## 安装与备份
 
-项目源码以 `D:\AI\Projects\Active\im-skills` 为最终维护位置。三个运行时副本安装至当前用户的 `.codex/skills`、`.claude/skills`、`.agents/skills`；保留原 IMteacher 教学参考文件，并先备份被覆盖目录到本项目 `backups/`。
+三个运行时副本安装至当前用户的 `.codex/skills`、`.claude/skills`、`.agents/skills`；保留原 IMteacher 教学参考文件，并先备份被覆盖目录到本项目 `backups/`。
 
 ```powershell
 python -X utf8 scripts/validate_bundle.py
@@ -58,6 +74,6 @@ python -X utf8 scripts/validate_bundle.py
 
 ## 已验证范围
 
-`tests/` 记录单代理多情境行为演练和修正，`scripts/validate_bundle.py` 检查四技能元数据、本地引用、两份共享协议一致与旧参考文件保留。它们不证明长期教学效果、五次独立重复抽样或文件并发安全；共享文件同时写入时仍需指定单一写入者。
+`tests/` 记录单代理多情境行为演练和修正，`scripts/validate_bundle.py` 检查六技能元数据、本地引用、共享协议一致与旧参考文件保留。它们不证明长期教学效果、五次独立重复抽样或文件并发安全；共享文件同时写入时仍需指定单一写入者。
 
-查看 [设计](docs/design.md) 与 [实施记录](docs/superpowers/plans/2026-11-05-im-suite.md)。本仓库为发布副本，同步自正本 `D:\AI\Projects\Active\im-skills`；原生字幕、视频元数据与第三方源码快照仅留本地研究目录（见 `.gitignore`），不随套件分发。
+查看 [设计](docs/design.md) 与 [实施记录](docs/superpowers/plans/2026-11-05-im-suite.md)。
