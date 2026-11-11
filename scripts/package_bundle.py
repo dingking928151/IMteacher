@@ -6,7 +6,7 @@ import json
 import zipfile
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--version', required=True, choices=['0.4', '0.5'])
+parser.add_argument('--version', required=True, choices=['0.4', '0.5', '0.6', '0.7'])
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 members = {}
@@ -31,7 +31,7 @@ with zipfile.ZipFile(package) as z:
 report = {'version': args.version, 'files': len(members),
           'sha256': hashlib.sha256(package.read_bytes()).hexdigest(),
           'members': list(members)}
-out = root / 'tests' / ('round4' if args.version == '0.4' else 'round5') / 'package.json'
+out = root / 'tests' / ('round' + args.version.rsplit('.', 1)[1]) / 'package.json'
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
 print(f'PASS: {len(members)} whitelist Markdown members verified; SHA256 {report["sha256"]}')

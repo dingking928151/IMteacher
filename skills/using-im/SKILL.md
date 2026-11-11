@@ -1,13 +1,13 @@
 ---
 name: using-im
-description: Use when a user starts or resumes the IM learning and personal-development suite, asks which IM skill to use, or combines planning, tutoring and execution review. 用户说“用IM”“继续IM”“规划并监督我”时适用。
+description: Use when a user starts or resumes the IM learning and personal-development suite, asks which IM skill to use, or combines planning, tutoring and execution review, or asks IM to advance work projects, build workflows or coordinate agents. 用户说“用IM”“继续IM”“规划并监督我”时适用。
 ---
 
 # Using IM：入口、首次引导与路由
 
 遇到有价值且用户希望稍后处理的线索，按 [后台接续](references/background-followups.md) 判断授权、入队与回传；普通闲聊保持当轮。
 
-IM 支持学业与个人发展。先响应用户当下需要，不把每次对话都变成完整规划访谈。
+IM 支持学业、个人发展和项目工作。先响应用户当下需要，不把每次对话都变成完整规划访谈。
 
 首次采用并设置学习/规划，或说“先了解我”时，按 [互动初始化](references/onboarding.md) 先了解本次重点和现实约束，等待本人回答，再逐步补缺；旧记录直接复用。能力咨询、普通答疑、已有进度续课不启动建档。Dot/Grok Bot等宿主的接入、跨设备状态和提醒见 [宿主接入](references/agent-runtime.md)，不能把技能安装当成数据已同步。
 
@@ -20,6 +20,9 @@ IM 支持学业与个人发展。先响应用户当下需要，不把每次对�
 | 对账、没做到、卡住、周复盘、监督执行 | imsupervisor |
 | 经历/意义反思、价值澄清、不急着定目标的可能人生 | imreflect |
 | 轻松聊天、倾听、普通身心关怀，不要求产出任务 | imcompanion |
+| 单人推进开发、科研或内容项目，准备可验收的交付 | imwork |
+| 根据目标和现有工具搭建/改造工作流（包括单人执行） | imcowork；只构筑先交草案，执行另按实际授权 |
+| 跨会话协作、工作 Bot、分派 Agent、复用工作栈 | imcowork；每次先预览，明确同意再派发 |
 | 单个事实/概念小问，或无关任务 | 直接回答；不启动套件流程 |
 
 单题或无关任务在此结束路由，不读取共享状态或其他学习档案。
@@ -34,7 +37,7 @@ IM 支持学业与个人发展。先响应用户当下需要，不把每次对�
 
 开场简短说明当前负责人和下一动作，随后执行。例：“这轮用 implanner，把你已有的周目标压到今天的25分钟；另外两线先标待安排。”缺少截止日就保持未知。
 
-组件是按需流程，不自行启动后台代理或新聊天。用户明确要求提醒时走宿主真实调度器，未确认保存不得承诺会提醒；组件不可用时说明局限并按已读流程完成可做部分。
+组件是按需流程，不自行启动后台代理或新聊天。项目与学习正本分开；即便点名一套已保存的工作栈，也先按 imcowork 给出本次预览，等本人确认。普通“继续科研”按意图区分：系统学习交 imteacher，推进实验或交付交 imwork；要求按工具构筑科研流程先交 imcowork，流程中的科学证据由 imwork 验收。用户明确要求提醒时走宿主真实调度器，未确认保存不得承诺会提醒；组件不可用时说明局限并按已读流程完成可做部分。
 
 用户说“越用越适合我”时，沿用同一画像与 [个体适配流程](references/adaptation-loop.md)，由相关组件做一次可检查的调整；不新开人格测试，不声称已启动后台训练。
 

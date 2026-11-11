@@ -5,7 +5,7 @@ import sys
 import yaml
 
 root = Path(__file__).resolve().parents[1]
-expected = {'using-im', 'implanner', 'imteacher', 'imsupervisor', 'imreflect', 'imcompanion'}
+expected = {'using-im', 'implanner', 'imteacher', 'imsupervisor', 'imreflect', 'imcompanion', 'imwork', 'imcowork'}
 errors = []
 actual = {p.name for p in (root / 'skills').iterdir() if p.is_dir()}
 if actual != expected:
@@ -52,4 +52,4 @@ if not original_refs <= present:
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     raise SystemExit(1)
-print('PASS: all six skills; structural checks only, not behavioral validation.')
+print('PASS: all eight skills; structural checks only, not behavioral validation.')

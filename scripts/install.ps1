@@ -1,11 +1,13 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [ValidateSet('Codex','Claude','Agents')]
-    [string[]]$Targets = @('Codex','Claude','Agents')
+    [string[]]$Targets = @('Codex','Claude','Agents'),
+    [ValidateSet('using-im','implanner','imteacher','imsupervisor','imreflect','imcompanion','imwork','imcowork')]
+    [string[]]$Skills
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
-$skillNames = @('using-im','implanner','imteacher','imsupervisor','imreflect','imcompanion')
+$skillNames = if ($Skills) { $Skills | Select-Object -Unique } else { @('implanner','imteacher','imsupervisor','imreflect','imcompanion','imwork','imcowork','using-im') }
 $targetRoots = @{
     Codex = Join-Path $env:USERPROFILE '.codex\skills'
     Claude = Join-Path $env:USERPROFILE '.claude\skills'
