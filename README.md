@@ -114,3 +114,7 @@ python -X utf8 scripts/validate_bundle.py
 本轮来源采用与局限见 [研究审核](research/round4/codex-audit.md)，实际情景与安装验证见 tests/round4/。新增分支不宣称经过心理疗效验证，尚未做Dot/Grok真实账号与通知投递验收。
 
 本轮Claude在“IM系列skill改进”会话补读三篇反馈/自我调节资料，处理[Tasha Eurich自我觉察讲座](https://www.youtube.com/watch?v=tGdsOXZpyWE)的英文字幕与元数据（未审阅画面），静态阅读jrnl三个源码文件；Codex核对相关原文、字幕片段、固定提交与两个代码文件的Git blob哈希，并审核候选。具体保留/拒绝项以research/round4/codex-audit.md为准，原始候选并非正式规则。
+
+## 可选知识题材（候选目录）
+
+[knowledge/](knowledge/README.md) 把历轮审核快照中的外部资料与近期讨论想法按五个主题整理为54个资源卡，注明核对范围、局限与历史采用状态。**所有内容仅为可选参考题材：本次未加入技能规则、不自动加载或执行**；是否采用由后续按需审核决定。
